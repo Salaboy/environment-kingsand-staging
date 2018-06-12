@@ -30,4 +30,4 @@ dependencies:
   version: 1.0.17
 - name: ttc-connectors-processing
   repository: http://jenkins-x-chartmuseum:8080
-  version: 1.0.11
+  version: 1.0.15
