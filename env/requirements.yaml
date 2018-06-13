@@ -34,6 +34,3 @@ dependencies:
 - name: ttc-dashboard-ui
   repository: http://jenkins-x-chartmuseum:8080
   version: 0.0.35
-- name: ttc-rb-alfresco-campaign
-  repository: http://jenkins-x-chartmuseum:8080
-  version: 1.0.4
