@@ -1,5 +1,5 @@
 expose:
-  Args: 
+  Args:
     - --v
     - 4
   Annotations:
@@ -7,7 +7,7 @@ expose:
     helm.sh/hook-delete-policy: hook-succeeded
 
 cleanup:
-  Args: 
+  Args:
     - --cleanup
   Annotations:
     helm.sh/hook: pre-delete
@@ -21,10 +21,83 @@ expose:
   Annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: hook-succeeded
-rabbitmq:
-  rabbitmq:
-    username: "guest"
-    password: "guest"
-  ingress:
-    enabled: true
 
+global:
+  keycloak:
+    url: "http://jx-staging-quickstart-http.jx-staging.35.205.181.161.nip.io/auth"
+
+application:
+  activiti-cloud-query:
+    db:
+      name: querypostgresql
+      password: query
+  querypostgresql:
+     postgresPassword: query
+  activiti-cloud-demo-ui:
+    service:
+      annotations:
+        fabric8.io/expose: "true"
+        fabric8.io/ingress.annotations: "kubernetes.io/ingress.class: nginx"
+    gatewayUrl:  "http://activiti-cloud-gateway.jx-staging.35.205.181.161.nip.io"
+    idmUrl: "http://jx-staging-quickstart-http.jx-staging.35.205.181.161.nip.io/auth/realms/activiti/protocol/openid-connect/token"
+    idmClientId:  "activiti"
+
+  rabbitmq:
+    enabled: true
+    rabbitmqUsername: "guest"
+    rabbitmqPassword: "guest"
+    rabbitmqErlangCookie: 124567890abcdefghijklmnopqrstuv
+    ingress:
+      enabled: true
+      hostName: "jx-staging-quickstart-http.jx-staging.35.205.181.161.nip.io"
+      path: /rabbitmq
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/rewrite-target: /
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/cors-allow-headers: "X-Forwarded-For, X-Forwarded-Proto, X-Forwarded-Port, X-Forwarded-Prefix"
+        nginx.ingress.kubernetes.io/x-forwarded-prefix: "true"
+
+infrastructure:
+  activiti-keycloak:
+    keycloak:
+      enabled: true
+      keycloak:
+        username: admin
+        password: admin
+        persistence:
+          deployPostgres: false
+          dbVendor: H2
+        ingress:
+          enabled: true
+          path: /
+          hosts:
+            - "jx-staging-quickstart-http.jx-staging.35.205.181.161.nip.io"
+          annotations:
+            kubernetes.io/ingress.class: nginx
+            nginx.ingress.kubernetes.io/rewrite-target: /
+            nginx.ingress.kubernetes.io/configuration-snippet: |
+              add_header Access-Control-Allow-Methods "POST, GET, OPTIONS, PUT, PATCH, DELETE";
+              add_header Access-Control-Allow-Credentials true;
+              add_header Access-Control-Allow-Headers "DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization";
+        preStartScript: |
+          /opt/jboss/keycloak/bin/add-user.sh -u admin -p admin
+          /opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u admin -p admin
+          cp /realm/activiti-realm.json .
+          sed -i 's/activiti-cloud-demo-ui:30082/jx-staging-quickstart-http.jx-staging.35.205.181.161.nip.io/g' activiti-realm.json
+          sed -i 's/activiti-cloud-demo-ui:\*/jx-staging-quickstart-http.jx-staging.35.205.181.161.nip.io:*/g' activiti-realm.json
+          sed -i 's/placeholder.com/jx-staging-quickstart-http.jx-staging.35.205.181.161.nip.io:*/g' activiti-realm.json
+          sed -i 's/dummy.com/gw.jx-staging.35.205.181.161.nip.io:*/g' activiti-realm.json
+          sed -i 's/activiti-cloud-sso-idm-kub:30082/gw.jx-staging.35.205.181.161.nip.io/g' activiti-realm.json
+          sed -i 's/activiti-cloud-demo-ui:3000/activiti-cloud-demo-ui.jx-staging.35.205.181.161.nip.io/g' activiti-realm.json
+  activiti-cloud-gateway:
+    service:
+      annotations:
+        fabric8.io/expose: "true"
+        kubernetes.io/ingress.class: nginx
+        fabric8.io/ingress.annotations: |-
+          kubernetes.io/ingress.class: nginx
+          nginx.ingress.kubernetes.io/rewrite-target: /
+          nginx.ingress.kubernetes.io/enable-cors: true
+          nginx.ingress.kubernetes.io/cors-allow-headers: "*"
+          nginx.ingress.kubernetes.io/x-forwarded-prefix: true
