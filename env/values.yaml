@@ -31,6 +31,11 @@ application:
     db:
       name: querypostgresql
       password: query
+    image:
+      repository: salaboy/activiti-cloud-query:latest
+  activiti-cloud-audit:
+    image:
+      repository: salaboy/activiti-cloud-audit:latest
   querypostgresql:
      postgresPassword: query
   activiti-cloud-demo-ui:
