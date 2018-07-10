@@ -27,15 +27,19 @@ global:
     url: "http://jx-staging-quickstart-http.jx-staging.35.205.181.161.nip.io/auth"
 
 application:
+  runtime-bundle:
+    enabled: true
+    image:
+      repository: salaboy/example-runtime-bundle  
   activiti-cloud-query:
     db:
       name: querypostgresql
       password: query
     image:
-      repository: salaboy/activiti-cloud-query:latest
+      repository: salaboy/activiti-cloud-query
   activiti-cloud-audit:
     image:
-      repository: salaboy/activiti-cloud-audit:latest
+      repository: salaboy/activiti-cloud-audit
   querypostgresql:
      postgresPassword: query
   activiti-cloud-demo-ui:
