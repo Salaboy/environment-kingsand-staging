@@ -30,8 +30,9 @@ application:
   runtime-bundle:
     enabled: true
     image:
-      repository: salaboy/example-runtime-bundle  
+      repository: salaboy/example-runtime-bundle
       tag: latest
+      pullPolicy: Always
   activiti-cloud-query:
     db:
       name: querypostgresql
@@ -39,10 +40,12 @@ application:
     image:
       repository: salaboy/activiti-cloud-query
       tag: latest
+      pullPolicy: Always
   activiti-cloud-audit:
     image:
       repository: salaboy/activiti-cloud-audit
       tag: latest
+      pullPolicy: Always
   querypostgresql:
      postgresPassword: query
   activiti-cloud-demo-ui:
