@@ -31,15 +31,18 @@ application:
     enabled: true
     image:
       repository: salaboy/example-runtime-bundle  
+      tag: latest
   activiti-cloud-query:
     db:
       name: querypostgresql
       password: query
     image:
       repository: salaboy/activiti-cloud-query
+      tag: latest
   activiti-cloud-audit:
     image:
       repository: salaboy/activiti-cloud-audit
+      tag: latest
   querypostgresql:
      postgresPassword: query
   activiti-cloud-demo-ui:
