@@ -36,9 +36,6 @@ application:
       tag: latest
       pullPolicy: Always
   activiti-cloud-query:
-    db:
-      name: querypostgresql
-      password: query
     image:
       repository: salaboy/activiti-cloud-query
       tag: latest
@@ -48,8 +45,6 @@ application:
       repository: salaboy/activiti-cloud-audit
       tag: latest
       pullPolicy: Always
-  querypostgresql:
-     postgresPassword: query
   activiti-cloud-demo-ui:
     service:
       annotations:
