@@ -28,17 +28,14 @@ application:
   runtime-bundle:
     enabled: true
     image:
-      repository: salaboy/example-runtime-bundle
       tag: latest
       pullPolicy: Always
   activiti-cloud-query:
     image:
-      repository: salaboy/activiti-cloud-query
       tag: latest
       pullPolicy: Always
   activiti-cloud-audit:
     image:
-      repository: salaboy/activiti-cloud-audit
       tag: latest
       pullPolicy: Always
   rabbitmq:
