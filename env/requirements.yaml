@@ -37,3 +37,9 @@ dependencies:
 - name: showcase-admin-tool
   repository: http://jenkins-x-chartmuseum:8080
   version: 0.0.9
+- name: infrastructure
+  repository: https://activiti.github.io/activiti-cloud-charts/
+  version: 0.1.6
+- name: application
+  repository: https://activiti.github.io/activiti-cloud-charts/
+  version: 0.1.9
